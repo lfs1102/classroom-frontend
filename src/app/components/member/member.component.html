@@ -1,0 +1,18 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Repository</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let member of members">
+            <td>{{member.name}}</td>
+            <td>{{member.role}}</td>
+            <td>{{member.username}}@fudan.edu.cn</td>
+            <td><a href="{{member.web_url}}" target="_blank">Visit</a></td>
+        </tr>
+    </tbody>
+</table>

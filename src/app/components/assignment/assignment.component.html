@@ -1,0 +1,49 @@
+<div *ngIf="!assignments" id="empty" style="text-align: center">
+    <span class="spinner">
+        Loading...
+    </span>
+</div>
+<div class="content-container" *ngIf="assignments">
+    <div class="content-area">
+        <div Markdown path="{{documentUrl}}" *ngIf="params['assignmentSubItem'] == 'Document'"></div>
+        <div *ngIf="params['assignmentSubItem'] == 'Submission'">
+            <div class="row">
+                <div class="">
+                    <div class="card">
+                        <div class="card-header">
+                            Submission for {{assignment.name}}.
+                        </div>
+                        <div class="card-block">
+                            <div class="card-title">
+                                Submit your code by running following commands in your working directory:
+                            </div>
+                            <div class="card-text">
+                                <pre>{{gitCommands}}</pre>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-sm btn-link">Footer Action 1</button>
+                            <button class="btn btn-sm btn-link">Footer Action 2</button>
+                        </div>
+                    </div>
+                </div>
+            </div>           
+        </div>
+    </div>
+    <nav class="sidenav">
+        <section class="sidenav-content">
+            <section class="nav-group" *ngFor="let a of assignments; let i = index;">
+                <input id="tab-{{i}}" type="checkbox">            
+                <label for="tab-{{i}}">{{a.name}}</label>
+                <ul class="nav-list">
+                    <li><a class="nav-link" 
+                        (click)="switchAssignment(a, 'Document')" 
+                        [class.active]="params['assignmentSubItem'] == 'Document' && a.id == params['assignmentID']">Document</a></li>
+                    <li><a class="nav-link" 
+                        (click)="switchAssignment(a, 'Submission')"
+                        [class.active]="params['assignmentSubItem'] == 'Submission' && a.id == params['assignmentID']">Submission</a></li>
+                </ul>
+            </section>
+        </section>
+    </nav>
+</div>
