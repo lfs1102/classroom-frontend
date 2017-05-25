@@ -15,6 +15,9 @@ export class LoginComponent {
     constructor(private router: Router, private userService: UserService,  private menuService: MenuService) {
         if (userService.token && userService.username) {
             this.menuService.init('assignment');
+            this.menuService.loaded.then(() => {
+                this.menuService.navigateMenu('notification');
+            });        
         } else {
             this.username = '13302010002';
             this.password = '12345678';
@@ -25,6 +28,9 @@ export class LoginComponent {
     login() {
         this.userService.login(this.username, this.password).subscribe(res => {
             this.menuService.init('assignment');
+            this.menuService.loaded.then(() => {
+                this.menuService.navigateMenu('notification');
+            });
         });
     }
 }

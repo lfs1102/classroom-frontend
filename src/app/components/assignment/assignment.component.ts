@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MenuService } from '../../services/MenuService'
 import { Router, ActivatedRoute } from '@angular/router';
 import { Http } from '@angular/http';
+import { UserService } from '../../services/UserService'
 
 @Component({
     styleUrls: ['assignment.component.scss'],
@@ -20,7 +21,7 @@ export class AssignmentComponent {
 
     loaded: Promise<any>;
 
-    constructor(private menuService: MenuService, private route: ActivatedRoute, private router: Router, private http: Http) {
+    constructor(private menuService: MenuService, private route: ActivatedRoute, private router: Router, private http: Http, private userService: UserService) {
 
     }
 
@@ -51,9 +52,12 @@ export class AssignmentComponent {
                                     'git init',
                                     'git add .',
                                     'git commit -m "first commit."',
-                                    `git remote add origin https://github.com/lfs1102/justtest.git`,
+                                    `git remote add origin https://gitlab.lifengshuang.website/${this.userService.username}/${this.assignment['name']}.git`,
                                     'git push origin master'
-                                ].map(x => '  ' + x).join("\n")
+                                ].map(x => '  ' + x).join("\n");
+                                this.menuService.post(`/classes/${this.course['id']}/assignments/fork/${this.assignment['id']}`, {}).subscribe((res) => {
+                                    console.log("Submission ready")
+                                });
                             }
                         }
                     });

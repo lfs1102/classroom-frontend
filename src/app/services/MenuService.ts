@@ -20,10 +20,13 @@ export class MenuService {
 
   loaded: Promise<any>;
 
+  members: Array<object>;
+  role: string;
+
   constructor(private http: Http, private router: Router, private userService: UserService) {
     console.log('MenuService Initialized...');
-    this.baseUrl = "http://localhost:10010/api/v1";
-    this.rubyServerUrl = 'http://localhost:4567'
+    this.baseUrl = "http://nodejs-backend/api/v1";
+    this.rubyServerUrl = 'http://sinatra-backend'
     this.loginMenu = [
       {
         "name": "Classroom",
@@ -84,10 +87,10 @@ export class MenuService {
         if (menu) {
           this.selectedMenu = this.menu[this.selectedClassIndex]['header'][menu];
         }
+        this.getRole();    
         resolve();
       });
     });
-    
   }
 
   selectCourse(index: number) {
@@ -99,12 +102,34 @@ export class MenuService {
     console.log(`select menu ${menu}`)
     console.log("Menu:", this.menu);
     this.selectedMenu = this.menu[this.selectedClassIndex]['header'][menu];
+    this.getRole();
   }
 
   navigateMenu(menu: string) {
     console.log(`navigated to menu ${menu}`)
     this.selectMenu(menu);
     this.router.navigate([this.selectedMenu['router'], {class: this.selectedClassIndex}]);    
+  }
+
+  getRole() {
+    this.get(`/classes/${this.mainMenu[this.selectedClassIndex]['id']}/members`).subscribe((res) => {
+      this.members = res.json();
+      for (let member of this.members) {
+        if (member['username'] == this.userService.username) {
+          console.log("User's role is " + member['role']);
+          this.role = member['role'];
+          return;
+        }
+      }
+      this.role = 'student';
+    });
+  }
+
+  isAdmin() {
+    if (this.role && (this.role == 'teacher' || this.role == "TA")) {
+      return true;
+    }
+    return false;
   }
 
   get(url: string) {

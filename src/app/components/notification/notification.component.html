@@ -1,0 +1,40 @@
+<div>
+    <button class="btn btn-primary" *ngIf="menuService.isAdmin()" (click)="modelOpen = !modelOpen">Add Notification</button>
+    <clr-modal [(clrModalOpen)]="modelOpen" [clrModalSize]="'xl'">
+        <h3 class="modal-title">Add a new notification</h3>
+        <div class="modal-body">
+            <form>
+                <section class="form-block">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" placeholder="Enter title here" size="45" name="title" [(ngModel)]="title">
+                    </div>
+                    <div class="form-group">
+                        <label for="text">Content:</label>
+                        <textarea id="text" rows="5" name="text" [(ngModel)]="text"></textarea>
+                    </div>
+                </section>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline" (click)="modelOpen = false">Cancel</button>
+            <button type="button" class="btn btn-primary" (click)="addNotification()">Add</button>
+        </div>
+    </clr-modal>
+
+    <div class="card" *ngFor="let n of notifications">
+        <div class="card-header">
+            {{n.title}}
+        </div>
+        <div class="card-block">
+            <div class="card-text">
+                <pre style="border: 0">{{n.text}}</pre>
+            </div>
+        </div>
+        <div class="card-block">
+            <div class="card-text">
+                {{n.time}}
+            </div>
+        </div>
+    </div>
+</div>
